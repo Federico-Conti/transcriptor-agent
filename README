@@ -1,44 +1,39 @@
 
-# 🎧 Transcript Processor – Audio to text file with Topics
+# 🎧 Transcriptor Agent
 
-This project allows you to:
+**Transform audio files into organized, topic-structured markdown documents using Azure OpenAI**
 
-1. 📝 Transcribe audio files (e.g., university lectures) using Azure OpenAI.
-2. 📚 Process the transcription to generate a Markdown document organized into topic sections.
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Azure OpenAI](https://img.shields.io/badge/Azure-OpenAI-orange.svg)](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
 
----
+## Features
 
-## 📁 Project structure
+- 🎵 **Audio Transcription**: Convert audio files to text using Azure OpenAI's transcription models
+- 📋 **Smart Processing**: Automatically organize transcriptions into topic-based sections
+- 🔄 **Batch Processing**: Handle large audio files by chunking them automatically
+- 📁 **Flexible Output**: Generate both raw transcriptions and structured markdown documents
 
-```
-.
-├── app.py                         # Orchestrator: transcription + processing
-├── transcriptor.py                # Script for audio transcription
-├── process.py       # Script to process the transcription
-├── requirements.txt               # Python dependencies
+## 🚀 Quick Start
 
-```
+### Prerequisites
 
-## ⚙️ Requirements
-
-- Python 3.8+
+- Python 3.8 or higher
 - Azure OpenAI account with access to:
-    - transcription model  (e.g., gpt-4o-audio-preview)
-    - GPT completion model (e.g., GPT-4 or GPT-3.5)
-- Audio files (e.g., `.mp3`, `.m4a`, etc.)
+    - Audio transcription model (e.g., `gpt-4o-audio-preview`)
+    - GPT completion model (e.g., `GPT-4` or `GPT-3.5`)
 
+### Installation
 
-## 📦 Installation
-
-1. Create a virtual environment (optional but recommended):
-
+1. **Clone and setup environment**:
+     ```bash
+     git clone <repository-url>
+     cd transcriptor-agent
+     source ./start.sh  # Creates virtual environment and installs dependencies
      ```
-     ./start.sh
-     ```
 
-3. Create a `.env` file in the project root with the following content:
-
-     ```env
+2. **Configure environment variables**:
+     Create a `.env` file in the project root:
+     ```sh
      AZURE_OPENAI_KEY="your_api_key"
      AZURE_OPENAI_STT_ENDPOINT="https://.../audio/transcriptions?api-version=..."
      AZURE_OPENAI_ENDPOINT="https://...azure.com/"
@@ -49,40 +44,48 @@ This project allows you to:
      INPUT_FOLDER="/path/to/your/audio"
      OUTPUT_FOLDER="/path/to/output"
      EXTENSION_OUTPUT_TRANSCRIPTION=".md"
-     CHUNK_LENGTH_MS="300000"  # e.g., 5 minutes
+     CHUNK_LENGTH_MS="300000"  # 5 minutes in milliseconds
      ```
 
+## 📖 Usage
 
-## Usage
-
-### 🔁 Full run (transcription + segmentation)
-
+### Complete Workflow
+Process audio file from transcription to organized markdown:
 ```bash
 python app.py filename.mp3
 ```
 
-Output:
+**Output**:
+- `filename.md` → Raw transcription
+- `filename_withTopics.md` → Organized with topic sections
 
-* `filename.md` → raw transcription
-* `filename_withTopics.md` → segmented version with topic sections
+### Individual Components
 
-### 📝 Transcription only
-
+**Transcription only**:
 ```bash
 python transcriptor.py filename.mp3
 ```
 
-### 📚 Process transcription only
-
+**Process existing transcription**:
 ```bash
 python process.py filename.md
 ```
 
-## Notes
+## 📂 Project Structure
 
-* Files are automatically saved to the folder specified in `.env`.
-* Each audio chunk is sent separately to OpenAI STT.
-    * Currently audio models have a limit of about 20 minutes.
-    * If the audio to transcribe is shorter than this limit, you can use `transcriptor.sh` directly.
-* The resulting transcription is passed to GPT to organize the content into coherent topic sections.
+```
+transcriptor-agent/
+├── app.py              # Main orchestrator script
+├── transcriptor.py     # Audio transcription module
+├── process.py          # Transcription processing module
+├── requirements.txt    # Python dependencies
+├── start.sh            # Environment setup script
+```
+     
+## ⚠️ Important Notes
+
+- **Audio Limits**: Azure OpenAI audio models support approximately 20 minutes per request
+- **Chunking**: Large files are automatically split into manageable chunks
+- **Output Location**: All files are saved to the directory specified in `OUTPUT_FOLDER` env variable
+- **Supported Formats**: `.mp3`, `.m4a`, and other common audio formats
 
