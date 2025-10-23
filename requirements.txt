@@ -1,0 +1,6 @@
+openai
+pathlib
+langchain
+pydub 
+requests
+dotenv
