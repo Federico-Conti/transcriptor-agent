@@ -13,18 +13,19 @@
 - 🔄 **Batch Processing**: Handle large audio files by chunking them automatically
 - 📁 **Flexible Output**: Generate both raw transcriptions and structured markdown documents
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
 - Python 3.8 or higher
 - Azure OpenAI account with access to:
-    - Audio transcription model (e.g., `gpt-4o-audio-preview`)
-    - GPT completion model (e.g., `GPT-4` or `GPT-3.5`)
+    - Audio transcription model (e.g., `gpt-4o-mini-transcribe`, `gpt-4o-transcribe`, `gpt-4o-transcribe-diarize`)
+    - GPT completion model (e.g., `gpt-5`, `gpt-5-mini` or Legacy models)
 
 ### Installation
 
 1. **Clone and setup environment**:
+   
      ```bash
      git clone <repository-url>
      cd transcriptor-agent
@@ -32,30 +33,53 @@
      ```
 
 2. **Configure environment variables**:
-     Create a `.env` file in the project root:
+   
+     ```markdown
+     Create a `.env` file in the project root with the following variables:
+
      ```sh
      AZURE_OPENAI_KEY="your_api_key"
-     AZURE_OPENAI_STT_ENDPOINT="https://.../audio/transcriptions?api-version=..."
+     # The API key for authenticating requests to your Azure OpenAI resource.
+
      AZURE_OPENAI_ENDPOINT="https://...azure.com/"
+     # The base URL of your Azure OpenAI resource.
+
+     AZURE_OPENAI_STT_ENDPOINT="https://.../audio/transcriptions?api-version=..."
+     # The endpoint URL for the Azure OpenAI audio transcription service.
+
      AZURE_OPENAI_STT_MODEL="transcription_model_name"
+     # The name of the deployed Azure OpenAI transcription model.
+
      AZURE_OPENAI_COMPLETION_MODEL="gpt_model_name"
+     # The name of the deployed Azure OpenAI completion model.
+
      AZURE_OPENAI_API_VERSION="2024-12-01-preview"
+     # The API version to use for the Azure OpenAI completion model.
 
      INPUT_FOLDER="/path/to/your/audio"
-     OUTPUT_FOLDER="/path/to/output"
-     EXTENSION_OUTPUT_TRANSCRIPTION=".md"
-     CHUNK_LENGTH_MS="300000"  # 5 minutes in milliseconds
-     ```
+     # The directory path where input audio files are stored.
 
-## 📖 Usage
+     OUTPUT_FOLDER="/path/to/output"
+     # The directory path where output files will be saved.
+
+     EXTENSION_OUTPUT_TRANSCRIPTION=".md"
+     # The file extension for transcription output (e.g., .md, .txt).
+
+     CHUNK_LENGTH_MS="300000"
+     # The length of audio chunks in milliseconds (e.g., 300000 for 5 minutes).
+     ```
+   
+## Usage
 
 ### Complete Workflow
+
 Process audio file from transcription to organized markdown:
 ```bash
 python app.py filename.mp3
 ```
 
 **Output**:
+
 - `filename.md` → Raw transcription
 - `filename_withTopics.md` → Organized with topic sections
 
@@ -78,6 +102,7 @@ transcriptor-agent/
 ├── app.py              # Main orchestrator script
 ├── transcriptor.py     # Audio transcription module
 ├── process.py          # Transcription processing module
+├── transcriptor.sh     # Shell script for only audio transcription
 ├── requirements.txt    # Python dependencies
 ├── start.sh            # Environment setup script
 ```
