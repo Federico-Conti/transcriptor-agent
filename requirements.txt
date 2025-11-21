@@ -4,3 +4,4 @@ langchain
 pydub 
 requests
 dotenv
+tiktoken

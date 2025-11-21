@@ -2,6 +2,7 @@ import os
 import requests
 from pydub import AudioSegment
 from dotenv import load_dotenv
+import tiktoken
 
 load_dotenv()
 
@@ -12,6 +13,8 @@ INPUT_FOLDER = os.getenv("INPUT_FOLDER")
 OUTPUT_FOLDER = os.getenv("OUTPUT_FOLDER")
 EXT = os.getenv("EXTENSION_OUTPUT_TRANSCRIPTION")
 CHUNK_LENGTH_MS = int(os.getenv("CHUNK_LENGTH_MS"))
+
+enc = tiktoken.encoding_for_model("gpt-5-mini")
 
 def transcribe_audio(input_filename: str) -> str:
     input_path = os.path.join(INPUT_FOLDER, input_filename)
@@ -53,6 +56,16 @@ def transcribe_audio(input_filename: str) -> str:
         os.remove(chunk_filename)
 
     print(f"✅ Transcript saved to {output_path}")
+
+    # Count tokens in the output file
+    if os.path.exists(output_path):
+        with open(output_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        tokens = enc.encode(content)
+        print(f"[INFO] Token count in '{os.path.basename(output_path)}': {len(tokens)}")
+    else:
+        print(f"[WARN] Output file not found: {output_path}")
+
     return output_path
 
 if __name__ == "__main__":
